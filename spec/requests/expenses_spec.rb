@@ -29,6 +29,4 @@ RSpec.describe "Expenses API", type: :request do
       expect(Expense.find_by(id: expense.id)).to be_nil
     end
   end
-
-  
 end
