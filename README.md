@@ -7,19 +7,67 @@
 - Ruby 3.4.5
 - Rails 8.1.2 (API モード)
 - PostgreSQL
+- Dev Container (Docker Compose)
 
-## セットアップ
+## 開発環境のセットアップ
 
-```bash
-# 依存パッケージのインストール
-bin/setup
+本プロジェクトは **Dev Container** を使用しており、VS Code または GitHub Codespaces で統一された開発環境を利用できます。
 
-# データベースの作成・マイグレーション
-bin/rails db:create db:migrate
+### 前提条件
 
-# サーバー起動
-bin/rails server
+- [Docker](https://www.docker.com/)
+- [VS Code](https://code.visualstudio.com/) + [Dev Containers 拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+
+または
+
+- [GitHub Codespaces](https://github.com/features/codespaces)
+
+### 起動手順
+
+1. リポジトリをクローン
+
+    ```bash
+    git clone <repository-url>
+    ```
+
+2. VS Code でフォルダを開き、「Reopen in Container」を選択（または Codespaces で開く）
+
+3. コンテナが起動したら、ターミナルで以下を実行
+
+    ```bash
+    # 依存パッケージのインストール
+    bin/setup
+
+    # データベースの作成・マイグレーション
+    bin/rails db:create db:migrate
+
+    # サーバー起動
+    bin/rails server
+    ```
+
+サーバーはコンテナ内のポート 3000 で起動します。VS Code のポートフォワーディングにより `http://localhost:3000` でアクセスできます。
+
+### Dev Container の構成
+
 ```
+.devcontainer/
+├── devcontainer.json       # Dev Container 設定
+├── Dockerfile              # Ruby 3.4 (Debian bullseye) ベースイメージ
+├── docker-compose.yml      # app + PostgreSQL のマルチコンテナ構成
+└── create-db-user.sql      # DB 初期ユーザー作成スクリプト
+```
+
+- **app コンテナ** — Ruby on Rails アプリケーション (GitHub CLI, Node.js 同梱)
+- **db コンテナ** — PostgreSQL (ヘルスチェック付きで app より先に起動)
+
+データベース接続情報:
+
+| 項目 | 値 |
+|---|---|
+| ホスト | `db` |
+| ユーザー | `postgres` |
+| パスワード | `postgres` |
+| データベース名 | `rails_practice_development` |
 
 ## データモデル
 
@@ -119,7 +167,3 @@ bin/rails test
 ```
 GET /up
 ```
-
-* Deployment instructions
-
-* ...
