@@ -15,8 +15,6 @@ services:
 
     # Database connection string for Rails applications
     # Provides a standard way to connect to the PostgreSQL database
-    environment:
-      DATABASE_URL: "postgresql://postgres:postgres@db:5432/rails_practice_development"
 
    # Use proper Docker networking (not network_mode) to avoid namespace issues and ensure reliable container startup across environments
     depends_on:
