@@ -17,7 +17,7 @@ class ExpensesController < ApplicationController
     if @expense.save
       render json: @expense
     else
-      render json: @expense.error, status: :unprocessable_entity
+      render json: @expense.errors, status: :unprocessable_entity
     end
   end
 
@@ -27,7 +27,7 @@ class ExpensesController < ApplicationController
     if @expense.update(expense_params)
       render json: @expense
     else
-      render json: @expense.error, status: :unprocessable_entity
+      render json: @expense.errors, status: :unprocessable_entity
     end
   end
 
@@ -64,6 +64,32 @@ class ExpensesController < ApplicationController
                      .sum(:amount)
 
     render json: { year: year, month: month, summary: summary }
+  end
+
+  # TODO: GET /expenses/yearly_summary?year=2025
+  # TODO: Check this API
+  def yearly_summary
+    year = params[:year].to_i
+    start_date = Date.new(year, 1, 1)
+    end_date = start_date.end_of_year
+
+    total = Expense.where(date: start_date..end_date).sum(:amount)
+
+    render json: { year: year, total: total }
+  end
+
+  # TODO: GET /expenses/category_yearly_summary?year=2025
+  # TODO: Check this API
+  def category_yearly_summary
+    year = params[:year].to_i
+    start_date = Date.new(year, 1, 1)
+    end_date = start_date.end_of_year
+
+    summary = Expense.where(date: start_date..end_date)
+                     .group(:category)
+                     .sum(:amount)
+
+    render json: { year: year, summary: summary }
   end
 
   private

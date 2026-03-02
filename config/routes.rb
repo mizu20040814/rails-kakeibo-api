@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     collection do
       get :monthly_summary
       get :category_monthly_summary
+      get :yearly_summary
+      get :category_yearly_summary
     end
   end
 
